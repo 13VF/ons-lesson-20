@@ -1,8 +1,7 @@
 <template>
   <div id="app">
     <Calculator
-      msg="Welcome to Your Vue.js + TypeScript App"
-      :number="Math.random()"
+      calcTitle="My beautiful calculator!"
     />
   </div>
 </template>
