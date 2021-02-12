@@ -1,5 +1,5 @@
 <template>
-  <div class="todo todo--high">
+  <div :class="todoClasses">
     <div v-if="!isEditModeEnabled" class="todo__viewMode">
       <div class="todo__text">
         {{ text }}
@@ -7,12 +7,12 @@
       <div class="todo__deadline">{{ deadline }}</div>
     </div>
     <div v-else class="todo__editMode">
-      <input type="text" class="todo__editModeInput">
+      <input v-model="textInputValue" type="text" class="todo__editModeInput">
       <button class="todo__editModeButton" @click="onSave">Сохранить</button>
     </div>
     <div class="todo__buttons">
       <button class="todo__buttonEdit" @click="toggleEditMode">Edit</button>
-      <button class="todo__buttonDelete">Delete</button>
+      <button class="todo__buttonDelete" @click="onDelete">Delete</button>
     </div>
   </div>
 </template>
@@ -33,6 +33,7 @@ export default Vue.extend({
   data() {
     return {
       isEditModeEnabled: false,
+      textInputValue: '',
     };
   },
 
@@ -52,6 +53,22 @@ export default Vue.extend({
     id() {
       return this.item.id;
     },
+    todoClasses() {
+      const classMap = {
+        1: 'todo--high',
+        2: 'todo--normal',
+        3: 'todo--low',
+      };
+      const priorityToMap = this.priority ? this.priority : 2;
+
+      return [
+        'todo',
+        classMap[priorityToMap],
+        {
+          'todo--deadline': true,
+        },
+      ];
+    },
   },
 
   methods: {
@@ -59,9 +76,19 @@ export default Vue.extend({
       this.isEditModeEnabled = !this.isEditModeEnabled;
     },
 
-    onSave() {
-      // некая логика обновления данных, пока её нет
+    onSave($event) {
+      const { id } = this;
+      const value = this.textInputValue;
+
+      this.$emit('save', {
+        id,
+        value,
+      }, $event);
       this.isEditModeEnabled = false;
+    },
+
+    onDelete() {
+      console.log('delete me');
     },
   },
 });

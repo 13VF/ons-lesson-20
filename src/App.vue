@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" ref="app">
     <Calculator
       calcTitle="My beautiful calculator!"
     />
